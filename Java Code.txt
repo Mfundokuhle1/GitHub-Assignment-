@@ -1,0 +1,81 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Item {
+    private String name;
+    private double price;
+    private int quantity;
+    private String type;
+
+    public Item(String name, double price, int quantity, String type) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.type = type;
+    }
+
+    public double calculateSalesTax() {
+        double taxPercent;
+        switch (type.toLowerCase()) {
+            case "raw":
+                taxPercent = 0.155;
+                break;
+            case "manufactured":
+                taxPercent = 0.205;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid item type: " + type);
+        }
+
+        return price * taxPercent;
+    }
+
+    public double calculateFinalPrice() {
+        return price + calculateSalesTax();
+    }
+
+    public void displayDetails() {
+        System.out.println("Item name: " + name);
+        System.out.println("Item price: " + price);
+        System.out.println("Sales tax liability per item: " + calculateSalesTax());
+        System.out.println("Final price: " + calculateFinalPrice());
+        System.out.println();
+    }
+}
+
+public class ItemCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Item> items = new ArrayList<>();
+
+        while (true) {
+            System.out.print("Enter item name: ");
+            String name = scanner.nextLine();
+
+            System.out.print("Enter item price: ");
+            double price = Double.parseDouble(scanner.nextLine());
+
+            System.out.print("Enter item quantity: ");
+            int quantity = Integer.parseInt(scanner.nextLine());
+
+            System.out.print("Enter item type (Raw/Manufactured): ");
+            String type = scanner.nextLine();
+
+            Item item = new Item(name, price, quantity, type);
+            items.add(item);
+
+            System.out.print("Do you want to enter details of any other item (y/n): ");
+            String choice = scanner.nextLine();
+
+            if (!choice.equalsIgnoreCase("y")) {
+                break;
+            }
+        }
+
+        System.out.println("\nItem Details:");
+        for (Item item : items) {
+            item.displayDetails();
+        }
+    }
+}
